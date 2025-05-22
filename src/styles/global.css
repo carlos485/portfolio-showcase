@@ -1,3 +1,9 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer components {
+  .clip-circle-center {
+    clip-path: circle(50% at 50% 50%);
+  }
+}
