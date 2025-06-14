@@ -1,0 +1,22 @@
+@tailwind base;
+@tailwind components;
+
+@layer components {
+  .clip-circle-center {
+    clip-path: circle(50% at 50% 50%);
+  }
+}
+
+@tailwind utilities;
+
+@font-face {
+  font-family: 'Major Mono Display';
+  src: url('/fonts/MajorMonoDisplay-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+html {
+  font-family: 'Major Mono Display', monospace;
+}
