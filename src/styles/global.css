@@ -23,10 +23,10 @@ html {
 
 body {
   background: #FFFFFF;
-  background: radial-gradient(circle,rgba(255, 255, 255, 1) 0%, rgba(240, 240, 240, 1) 100%);
+  background: radial-gradient(circle,rgba(255, 255, 255, 1) 0%, rgba(224, 224, 224, 1) 100%);
 
   @media (prefers-color-scheme: dark) {
     background: #000000;
-    background: linear-gradient(7deg,rgba(0, 0, 0, 1) 0%, rgba(107, 107, 107, 1) 100%);
+    background: linear-gradient(7deg,rgba(0, 0, 0, 1) 0%, rgba(87, 87, 87, 1) 100%);
   }
 }
