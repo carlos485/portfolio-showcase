@@ -1,0 +1,35 @@
+---
+export interface Props {
+  name: string;
+  size?: number | string;
+  class?: string;
+  color?: string;
+}
+
+const { name, size = 24, class: className = '', color } = Astro.props;
+
+let svgContent = '';
+try {
+  const svgModule = await import(`../assets/icons/${name}.svg?raw`);
+  svgContent = svgModule.default;
+} catch (error) {
+  console.warn(`Icon "${name}" not found`);
+  svgContent = '<svg><circle cx="12" cy="12" r="10" fill="currentColor"/></svg>';
+}
+
+const processedSvg = svgContent
+  .replace(/fill="[^"]*"/g, 'fill="currentColor"')
+  .replace(/width="[^"]*"/g, `width="${size}"`)
+  .replace(/height="[^"]*"/g, `height="${size}"`)
+  .replace(/class="[^"]*"/g, `class="${className}"`)
+  .replace(/<svg/, `<svg ${color ? `style="color: ${color}"` : ''}`);
+---
+
+<Fragment set:html={processedSvg} />
+
+<style>
+  svg {
+    display: inline-block;
+    vertical-align: middle;
+  }
+</style>
