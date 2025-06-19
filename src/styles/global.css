@@ -27,6 +27,6 @@ body {
 
   @media (prefers-color-scheme: dark) {
     background: #000000;
-    background: linear-gradient(7deg,rgba(0, 0, 0, 1) 0%, rgba(87, 87, 87, 1) 100%);
+    background: linear-gradient(248deg,rgba(0, 0, 0, 1) 0%, rgba(67, 67, 67, 1) 100%);
   }
 }
