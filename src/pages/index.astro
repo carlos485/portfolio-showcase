@@ -1,6 +1,7 @@
 ---
 import '../styles/global.css';
 import Icon from '../components/Icon.astro';
+import ThemeToggle from '../components/ThemeToggle.astro';
 
 const title = "Carlos Pando - Portfolio";
 const description = "Portfolio personal de Carlos Pando - Desarrollador Web";
@@ -28,6 +29,7 @@ const description = "Portfolio personal de Carlos Pando - Desarrollador Web";
 		<title>{title}</title>
 	</head>
 	<body>
+		<ThemeToggle />
 		<div class="container mx-auto px-4 min-h-screen flex flex-col justify-center items-center">
 			<!-- Header con nombre -->
 			<header class="text-center mb-16">
