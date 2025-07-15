@@ -24,7 +24,6 @@ const socialLinks = [
 ];
 ---
 <section class="container mx-auto px-4 min-h-screen flex flex-col justify-center items-center" aria-labelledby="hero-title">
-	<!-- Header con nombre -->
 	<header class="text-center mb-16">
 			<h1 id="hero-title" class="text-6xl md:text-7xl lg:text-8xl font-light tracking-wider mb-8 font-['Major_Mono_Display']">
 					<span class="text-black dark:text-white">Carlos</span>
@@ -32,21 +31,20 @@ const socialLinks = [
 			</h1>
 	</header>
 
-	<!-- Iconos de redes sociales -->
 	<nav class="flex space-x-8 mb-16 items-center" aria-label="Enlaces sociales y contacto">
 		{socialLinks.map(link => {
 			if (link.type === 'link') {
 				return (
-					<a href={link.href} target="_blank" rel="noopener noreferrer" class="text-black hover:text-gray-600 transition-colors duration-200" aria-label={link.label}>
-						<span class:list={[link.iconClass, 'text-5xl dark:text-white']} />
+					<a href={link.href} target="_blank" rel="noopener noreferrer" class="text-black hover:text-gray-600 dark:text-white dark:hover:text-gray-300 transition-colors duration-200" aria-label={link.label}>
+						<span class:list={[link.iconClass, 'text-5xl']} />
 					</a>
 				);
 			}
 			if (link.type === 'button') {
 				return (
 					<div class="relative">
-						<button id={link.id} data-email={link['data-email']} class="text-black hover:text-gray-600 transition-colors duration-200 focus:outline-none" aria-label={link.label}>
-							<span class:list={[link.iconClass, 'text-5xl dark:text-white']} />
+						<button id={link.id} data-email={link['data-email']} class="text-black hover:text-gray-600 dark:text-white dark:hover:text-gray-300 transition-colors duration-200 focus:outline-none" aria-label={link.label}>
+							<span class:list={[link.iconClass, 'text-5xl']} />
 						</button>
 						<span id="copy-feedback" class="absolute -top-10 left-1/2 -translate-x-1/2 bg-gray-800 text-white text-xs rounded py-1 px-2 opacity-0 transition-opacity duration-300 pointer-events-none" aria-live="polite" />
 					</div>
@@ -55,7 +53,6 @@ const socialLinks = [
 		})}
 	</nav>
 
-	<!-- Botones de acción -->
 	<div class="flex flex-col sm:flex-row gap-4">
 			<button id="open-cv-button" class="bg-black dark:bg-white text-white hover:bg-gray-800 dark:text-black dark:hover:bg-gray-200 px-8 py-3 text-xl font-medium tracking-wide transition-all duration-300 flex items-center justify-center gap-2 cursor-pointer">
 					<span class="icon-[streamline--business-user-curriculum] text-2xl"></span>
