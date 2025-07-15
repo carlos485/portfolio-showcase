@@ -1,4 +1,5 @@
 ---
+import CvModal from './CvModal.astro';
 ---
 <section class="container mx-auto px-4 min-h-screen flex flex-col justify-center items-center" aria-labelledby="hero-title">
 	<!-- Header con nombre -->
@@ -34,10 +35,10 @@
 
 	<!-- Botones de acción -->
 	<div class="flex flex-col sm:flex-row gap-4">
-			<a href="/cv.pdf" target="_blank" rel="noopener noreferrer" class="bg-black dark:bg-white text-white hover:bg-gray-800 dark:text-black dark:hover:bg-gray-200 px-8 py-3 text-xl font-medium tracking-wide transition-all duration-300 flex items-center justify-center gap-2">
+			<button id="open-cv-button" class="bg-black dark:bg-white text-white hover:bg-gray-800 dark:text-black dark:hover:bg-gray-200 px-8 py-3 text-xl font-medium tracking-wide transition-all duration-300 flex items-center justify-center gap-2 cursor-pointer">
 					<span class="icon-[streamline--business-user-curriculum] text-2xl"></span>
 					ver cv
-			</a>
+			</button>
 
 			<a href="/experiencia" class="border-2 border-black dark:border-white text-black dark:text-white px-8 py-3 text-xl font-medium tracking-wide hover:bg-black dark:hover:bg-white hover:text-white dark:hover:text-black transition-all duration-300 flex items-center justify-center gap-2">
 					<span class="icon-[fe--timeline] text-3xl"></span>
@@ -46,42 +47,4 @@
 	</div>
 </section>
 
-<script>
-	const copyButton = document.getElementById('copy-email-button');
-	const copyFeedback = document.getElementById('copy-feedback');
-
-	// Asegurarse de que los elementos existen antes de añadir listeners
-	if (copyButton && copyFeedback) {
-		let feedbackTimeout: NodeJS.Timeout;
-
-
-		const showFeedback = (message: string, duration = 2000) => {
-			// Asigna el mensaje y lo hace visible. El cambio de contenido
-			// será anunciado por lectores de pantalla gracias a `aria-live`.
-			copyFeedback.textContent = message;
-			copyFeedback.style.opacity = '1';
-
-			// Limpia cualquier timeout anterior para evitar solapamientos
-			clearTimeout(feedbackTimeout);
-
-			// Oculta el mensaje después de la duración especificada
-			feedbackTimeout = setTimeout(() => {
-				copyFeedback.style.opacity = '0';
-			}, duration);
-		};
-
-		copyButton.addEventListener('click', () => {
-			const email = copyButton.dataset.email;
-			if (!email) return;
-
-			navigator.clipboard.writeText(email)
-				.then(() => {
-					showFeedback('¡Copiado!');
-				})
-				.catch(err => {
-					console.error('Error al copiar el email: ', err);
-					showFeedback('Error al copiar');
-				});
-		});
-	}
-</script>
+<CvModal />

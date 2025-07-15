@@ -1,0 +1,29 @@
+---
+---
+<dialog id="cv-dialog" class="bg-gray-100 dark:bg-gray-900 text-black dark:text-white p-4 rounded-lg shadow-xl w-11/12 md:w-4/5 lg:w-3/4 max-w-4xl backdrop:bg-black/50">
+	<div class="flex justify-between items-center mb-4">
+		<h2 class="text-xl font-bold">Currículum vitae</h2>
+		<button id="close-cv-button" class="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors" aria-label="Cerrar diálogo">
+			<span class="icon-[mdi--close] text-2xl"></span>
+		</button>
+	</div>
+	<iframe src="/CV.pdf" class="w-full h-[75vh] md:h-[80vh] border-none" title="Visor de CV en PDF"></iframe>
+</dialog>
+
+<script>
+	// Lógica para el diálogo del CV. Este script busca los elementos en todo el documento,
+	// permitiéndole controlar el diálogo aunque el botón que lo abre esté en otro componente.
+	const openCvButton = document.getElementById('open-cv-button');
+	const closeCvButton = document.getElementById('close-cv-button');
+	const cvDialog = document.getElementById('cv-dialog') as HTMLDialogElement | null;
+
+	if (openCvButton && closeCvButton && cvDialog) {
+		openCvButton.addEventListener('click', () => cvDialog.showModal());
+		closeCvButton.addEventListener('click', () => cvDialog.close());
+
+		// Opcional: cerrar el diálogo al hacer clic fuera de él (en el backdrop)
+		cvDialog.addEventListener('click', (event) => {
+			if (event.target === cvDialog) cvDialog.close();
+		});
+	}
+</script>
