@@ -1,0 +1,133 @@
+---
+const experiences = [
+  {
+    id: 1,
+    title: "Senior Full Stack Developer",
+    company: "Tech Solutions Inc.",
+    logo: "/logos/tech-solutions.png",
+    period: "2022 - Presente",
+    location: "Remote",
+    description: "Desarrollo de aplicaciones web escalables usando React, Node.js y PostgreSQL. Liderazgo de equipo de 4 desarrolladores y implementación de arquitecturas microservicios.",
+    technologies: ["React", "Node.js", "PostgreSQL", "AWS", "Docker"],
+  },
+  {
+    id: 2,
+    title: "Frontend Developer",
+    company: "Digital Agency",
+    logo: "/logos/digital-agency.png",
+    period: "2020 - 2022",
+    location: "Madrid, España",
+    description: "Creación de interfaces de usuario responsivas y optimizadas. Colaboración estrecha con diseñadores UX/UI para implementar experiencias de usuario excepcionales.",
+    technologies: ["Vue.js", "TypeScript", "Sass", "Figma", "Git"],
+  },
+  {
+    id: 3,
+    title: "Junior Web Developer",
+    company: "StartUp Innovate",
+    logo: "/logos/startup-innovate.png",
+    period: "2019 - 2020",
+    location: "Barcelona, España",
+    description: "Desarrollo de funcionalidades web y mantenimiento de aplicaciones existentes. Aprendizaje de mejores prácticas y metodologías ágiles.",
+    technologies: ["JavaScript", "PHP", "MySQL", "Bootstrap", "jQuery"],
+  },
+  {
+    id: 4,
+    title: "Freelance Developer",
+    company: "Proyectos Independientes",
+    logo: "/logos/freelance.png",
+    period: "2018 - 2019",
+    location: "Remote",
+    description: "Desarrollo de sitios web y aplicaciones para pequeñas empresas. Gestión completa de proyectos desde la conceptualización hasta el despliegue.",
+    technologies: ["HTML", "CSS", "JavaScript", "WordPress", "Photoshop"],
+  },
+];
+---
+
+<section id="experience" class="min-h-screen py-20 px-4">
+  <div class="max-w-6xl mx-auto">
+    <h3 class="dark:text-white text-4xl md:text-6xl font-bold text-center mb-20 tracking-tight">Experiencia</h3>
+
+    <div class="relative">
+      <!-- Timeline Line -->
+      <div class="absolute left-1/2 transform -translate-x-1/2 w-0.5 h-full bg-black dark:bg-white hidden md:block"></div>
+
+      {experiences.map((exp, index) => (
+        <div class="relative mb-16 md:mb-24">
+          <!-- Logo en el punto de timeline -->
+          <div class="absolute left-1/2 transform -translate-x-1/2 w-14 h-14 bg-white dark:bg-black border-2 border-black dark:border-white rounded-full hidden md:flex items-center justify-center z-10 shadow-lg hover:scale-110 transition-transform duration-300">
+            <img src={exp.logo || "/placeholder.svg"} alt={exp.company} class="w-8 h-8 object-contain" />
+          </div>
+
+          <!-- Logo flotante de fondo (solo en desktop) -->
+          <div class={`absolute hidden xl:block opacity-5 w-32 h-32 ${index % 2 === 0 ? 'right-8 top-8' : 'left-8 top-8'} pointer-events-none`}>
+            <img src={exp.logo || "/placeholder.svg"} alt="" class="w-full h-full object-contain" />
+          </div>
+
+          <!-- Año como marcador lateral -->
+          <div class={`absolute hidden lg:block top-0 ${index % 2 === 0 ? 'right-full mr-16' : 'left-full ml-16'}`}>
+            <div class="text-8xl font-bold text-gray-100 dark:text-gray-900 font-mono select-none">
+              {exp.period.split(' - ')[0]}
+            </div>
+          </div>
+
+          <!-- Content Card -->
+          <div class={`md:w-5/12 ${index % 2 === 0 ? "md:ml-auto md:pl-16" : "md:mr-auto md:pr-16"}`}>
+            <div class="border-2 border-black dark:border-white bg-white dark:bg-black hover:shadow-xl dark:hover:shadow-white/10 transition-all duration-300 rounded-lg group">
+              <div class="p-8">
+                <!-- Header con logo y badge de duración -->
+                <div class="relative">
+                  <div class="flex items-center gap-4 mb-6">
+                    <div class="w-12 h-12 bg-gray-50 dark:bg-gray-900 rounded-lg flex items-center justify-center border border-gray-200 dark:border-gray-700 group-hover:scale-105 transition-transform duration-300">
+                      <img src={exp.logo || "/placeholder.svg"} alt={exp.company} class="w-8 h-8 object-contain" />
+                    </div>
+                    <div class="flex-1">
+                      <h4 class="text-xl font-bold font-mono">{exp.title}</h4>
+                      <span class="font-mono font-semibold text-gray-600 dark:text-gray-400">{exp.company}</span>
+                    </div>
+                  </div>
+                  
+                  <!-- Badge de período -->
+                  <div class="absolute -top-4 right-0">
+                    <span class="bg-black dark:bg-white text-white dark:text-black px-3 py-1 text-xs font-mono font-bold rounded-full">
+                      {exp.period}
+                    </span>
+                  </div>
+                </div>
+
+                <!-- Ubicación -->
+                <div class="flex items-center gap-2 mb-6">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                  </svg>
+                  <span class="font-mono text-sm">{exp.location}</span>
+                </div>
+
+                <!-- Descripción -->
+                <p class="text-gray-700 dark:text-gray-300 mb-6 leading-relaxed font-mono text-sm">
+                  {exp.description}
+                </p>
+
+                <!-- Tecnologías -->
+                <div class="flex flex-wrap gap-2">
+                  {exp.technologies.map((tech) => (
+                    <span class="px-3 py-1 bg-black dark:bg-white text-white dark:text-black text-xs font-mono font-bold rounded hover:scale-105 transition-transform duration-200">
+                      {tech}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Conector decorativo -->
+          {index < experiences.length - 1 && (
+            <div class="absolute left-1/2 transform -translate-x-1/2 bottom-0 translate-y-8 hidden md:block">
+              <div class="w-6 h-6 border-2 border-dashed border-gray-300 dark:border-gray-700 rounded-full bg-white dark:bg-black"></div>
+            </div>
+          )}
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
