@@ -1,26 +1,70 @@
 ---
 ---
-<dialog id="cv-dialog" class="bg-gray-100 dark:bg-gray-950 text-black dark:text-white p-4 rounded-lg shadow-xl w-11/12 md:w-4/5 lg:w-3/4 max-w-4xl backdrop:bg-black/50">
-	<div class="flex justify-between items-center mb-4">
+<dialog id="cv-dialog" class="bg-gray-100 dark:bg-gray-950 text-black dark:text-white p-0 rounded-lg shadow-xl w-11/12 md:w-4/5 lg:w-3/4 max-w-4xl overflow-hidden">
+	<header class="flex justify-between items-center p-4 border-b border-gray-200 dark:border-gray-700">
 		<h2 class="text-xl font-bold">Currículum vitae</h2>
 		<button id="close-cv-button" class="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors" aria-label="Cerrar diálogo">
 			<span class="icon-[mdi--close] text-2xl"></span>
 		</button>
-	</div>
-	<iframe src="/CV.pdf" class="w-full h-[75vh] md:h-[80vh] border-none" title="Visor de CV en PDF"></iframe>
+	</header>
+	<main class="h-[75vh] md:h-[80vh]">
+		<iframe src="/CV.pdf" class="w-full h-full border-none" title="Visor de CV en PDF"></iframe>
+	</main>
 </dialog>
 
 <script>
 	const openCvButton = document.getElementById('open-cv-button');
 	const closeCvButton = document.getElementById('close-cv-button');
 	const cvDialog = document.getElementById('cv-dialog') as HTMLDialogElement | null;
-
+ 
 	if (openCvButton && closeCvButton && cvDialog) {
-		openCvButton.addEventListener('click', () => cvDialog.showModal());
-		closeCvButton.addEventListener('click', () => cvDialog.close());
-
+		const openDialog = () => {
+			document.body.style.overflow = 'hidden';
+			cvDialog.showModal();
+			cvDialog.classList.add('open');
+		};
+ 
+		const closeDialog = () => {
+			cvDialog.classList.remove('open');
+			cvDialog.addEventListener('transitionend', () => {
+				cvDialog.close();
+				document.body.style.overflow = '';
+			}, { once: true });
+		};
+ 
+		openCvButton.addEventListener('click', openDialog);
+		closeCvButton.addEventListener('click', closeDialog);
+ 
+		// Cerrar al hacer clic en el fondo
 		cvDialog.addEventListener('click', (event) => {
-			if (event.target === cvDialog) cvDialog.close();
+			if (event.target === cvDialog) {
+				closeDialog();
+			}
+		});
+ 
+		// Cerrar con la tecla Escape (con animación)
+		cvDialog.addEventListener('cancel', (event) => {
+			event.preventDefault();
+			closeDialog();
 		});
 	}
 </script>
+
+<style is:global>
+	#cv-dialog {
+		transform: scale(0.95);
+		opacity: 0;
+		transition: transform 0.3s ease-out, opacity 0.3s ease-out;
+	}
+	#cv-dialog::backdrop {
+		background-color: rgb(0 0 0 / 0);
+		transition: background-color 0.3s ease-out;
+	}
+	#cv-dialog.open {
+		transform: scale(1);
+		opacity: 1;
+	}
+	#cv-dialog.open::backdrop {
+		background-color: rgb(0 0 0 / 0.5);
+	}
+</style>
