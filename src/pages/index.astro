@@ -35,3 +35,20 @@ const description = "Portfolio personal de Carlos Pando - Desarrollador Web";
 		<Experience />
 	</body>
 </html>
+
+<script>
+	// Nos aseguramos de que el script se ejecute después de que todo el HTML se haya cargado.
+	document.addEventListener('DOMContentLoaded', () => {
+		// Buscamos el botón que tiene el atributo `data-scroll-to`.
+		const scrollButton = document.querySelector('[data-scroll-to="experience"]');
+
+		if (scrollButton) {
+			scrollButton.addEventListener('click', () => {
+				// Buscamos el elemento de destino usando el ID "experience".
+				const targetElement = document.getElementById('experience');
+				// Si el elemento existe, nos desplazamos suavemente hacia él.
+				targetElement?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+			});
+		}
+	});
+</script>
