@@ -10,23 +10,32 @@
 @tailwind utilities;
 
 @font-face {
-  font-family: 'Major Mono Display';
-  src: url('/fonts/MajorMonoDisplay-Regular.ttf') format('truetype');
+  font-family: "Major Mono Display";
+  src: url("/fonts/MajorMonoDisplay-Regular.woff2") format("woff2"),
+    url("/fonts/MajorMonoDisplay-Regular.ttf") format("truetype");
   font-weight: normal;
   font-style: normal;
-  font-display: swap;
+  font-display: swap; /* 'swap' es bueno, muestra texto de respaldo mientras carga */
 }
 
 html {
-  font-family: 'Major Mono Display', monospace;
+  font-family: "Major Mono Display", monospace;
 }
 
 body {
-  background: #FFFFFF;
-  background: radial-gradient(circle,rgba(255, 255, 255, 1) 0%, rgba(224, 224, 224, 1) 100%);
+  background: #ffffff;
+  background: radial-gradient(
+    circle,
+    rgba(255, 255, 255, 1) 0%,
+    rgba(224, 224, 224, 1) 100%
+  );
 }
 
 .dark body {
   background: #000000;
-  background: linear-gradient(248deg,rgba(0, 0, 0, 1) 0%, rgba(67, 67, 67, 1) 100%);
+  background: linear-gradient(
+    248deg,
+    rgba(0, 0, 0, 1) 0%,
+    rgba(67, 67, 67, 1) 100%
+  );
 }
