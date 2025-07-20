@@ -13,13 +13,6 @@ const socialLinks = [
     href: 'https://github.com/carlos485',
     label: 'GitHub',
     iconClass: 'icon-[feather--github]'
-  },
-  {
-    type: 'button',
-    id: 'copy-email-button',
-    'data-email': 'carlospando856@gmail.com',
-    label: 'Copiar email',
-    iconClass: 'icon-[oui--email]'
   }
 ];
 ---
@@ -33,23 +26,11 @@ const socialLinks = [
 
 	<nav class="flex space-x-8 mb-16 items-center" aria-label="Enlaces sociales y contacto">
 		{socialLinks.map(link => {
-			if (link.type === 'link') {
-				return (
+			return (
 					<a href={link.href} target="_blank" rel="noopener noreferrer" class="text-black hover:text-gray-600 dark:text-white dark:hover:text-gray-300 transition-colors duration-200" aria-label={link.label}>
 						<span class:list={[link.iconClass, 'text-5xl']} />
 					</a>
 				);
-			}
-			if (link.type === 'button') {
-				return (
-					<div class="relative">
-						<button id={link.id} data-email={link['data-email']} class="text-black hover:text-gray-600 dark:text-white dark:hover:text-gray-300 transition-colors duration-200 focus:outline-none" aria-label={link.label}>
-							<span class:list={[link.iconClass, 'text-5xl']} />
-						</button>
-						<span id="copy-feedback" class="absolute -top-10 left-1/2 -translate-x-1/2 bg-gray-800 text-white text-xs rounded py-1 px-2 opacity-0 transition-opacity duration-300 pointer-events-none" aria-live="polite" />
-					</div>
-				);
-			}
 		})}
 	</nav>
 
