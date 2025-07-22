@@ -1,20 +1,6 @@
 ---
 import CvModal from './CvModal.astro';
-
-const socialLinks = [
-  {
-    type: 'link',
-    href: 'https://www.linkedin.com/in/carlos-pando-54786218a/',
-    label: 'LinkedIn',
-    iconClass: 'icon-[garden--linkedin-stroke-12]'
-  },
-  {
-    type: 'link',
-    href: 'https://github.com/carlos485',
-    label: 'GitHub',
-    iconClass: 'icon-[feather--github]'
-  }
-];
+import ContactModal from './ContactModal.astro';
 ---
 <section class="container mx-auto px-4 min-h-screen flex flex-col justify-center items-center" aria-labelledby="hero-title">
 	<header class="text-center mb-16">
@@ -26,14 +12,14 @@ const socialLinks = [
 
 	<nav class="flex space-x-8 mb-16 items-center" aria-label="Enlaces sociales y contacto">
 		<a href="https://www.linkedin.com/in/carlos-pando-54786218a/" target="_blank" class="border-2 border-black dark:border-white text-black dark:text-white px-8 py-3 text-md font-medium tracking-wide hover:bg-black dark:hover:bg-white hover:text-white dark:hover:text-black transition-all duration-300 flex items-center justify-center gap-2">
-			<span class="icon-[garden--linkedin-stroke-12]"></span>
+			<span class="icon-[mdi--linkedin] text-2xl"></span>
 			linkedin
 		</a>
 		<a href="https://github.com/carlos485" target="_blank" class="bg-black dark:bg-white text-white hover:bg-gray-800 dark:text-black dark:hover:bg-gray-200 px-8 py-3 text-md font-medium tracking-wide transition-all duration-300 flex items-center justify-center gap-2 cursor-pointer">
-			<span class="icon-[garden--linkedin-stroke-12]"></span>
+			<span class="icon-[mdi--github] text-2xl"></span>
 			github
 		</a>
-		<button class="border-2 border-black dark:border-white text-black dark:text-white px-8 py-3 text-md font-medium tracking-wide hover:bg-black dark:hover:bg-white hover:text-white dark:hover:text-black transition-all duration-300 flex items-center justify-center gap-2">
+		<button id="open-contact-button" class="border-2 border-black dark:border-white text-black dark:text-white px-8 py-3 text-md font-medium tracking-wide hover:bg-black dark:hover:bg-white hover:text-white dark:hover:text-black transition-all duration-300 flex items-center justify-center gap-2">
 			<span class="icon-[line-md--email]"></span>
 			contactar
 		</button>
@@ -53,3 +39,4 @@ const socialLinks = [
 </section>
 
 <CvModal />
+<ContactModal />

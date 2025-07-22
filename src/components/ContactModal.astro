@@ -1,0 +1,90 @@
+---
+---
+<dialog id="contact-modal" class="bg-white dark:bg-gray-900 text-black dark:text-white p-8 rounded-lg shadow-xl w-11/12 md:w-1/2 lg:w-1/3">
+    <div class="flex justify-between items-center mb-6">
+        <h2 class="text-2xl font-bold font-['Major_Mono_Display']">Contacto</h2>
+        <button id="close-contact-modal" class="text-3xl hover:text-gray-500 dark:hover:text-gray-400 transition-colors">&times;</button>
+    </div>
+    <form id="contact-form" class="space-y-4">
+        <div>
+            <label for="name" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">nombre</label>
+            <input type="text" id="name" name="name" required class="mt-1 block w-full px-3 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm text-black dark:text-white">
+        </div>
+        <div>
+            <label for="email" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">email</label>
+            <input type="email" id="email" name="email" required class="mt-1 block w-full px-3 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm text-black dark:text-white">
+        </div>
+        <div>
+            <label for="message" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">mensaje</label>
+            <textarea id="message" name="message" rows="4" required class="mt-1 block w-full px-3 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm text-black dark:text-white"></textarea>
+        </div>
+        <div class="flex justify-end pt-4">
+            <button type="submit" class="bg-black dark:bg-white text-white hover:bg-gray-800 dark:text-black dark:hover:bg-gray-200 px-6 py-2 text-md font-medium tracking-wide transition-all duration-300 rounded-md">
+                Enviar Mensaje
+            </button>
+        </div>
+    </form>
+</dialog>
+
+<script>
+    const contactModal = document.getElementById('contact-modal') as HTMLDialogElement | null;
+	const openContactButton = document.getElementById('open-contact-button');
+	const closeContactModalButton = document.getElementById('close-contact-modal');
+    const contactForm = document.getElementById('contact-form');
+
+    if (contactModal && openContactButton && closeContactModalButton && contactForm) {
+        const openDialog = () => {
+			document.body.style.overflow = 'hidden';
+			contactModal.showModal();
+			contactModal.classList.add('open');
+		};
+
+        const closeDialog = () => {
+			contactModal.classList.remove('open');
+			contactModal.addEventListener('transitionend', () => {
+				contactModal.close();
+				document.body.style.overflow = '';
+			}, { once: true });
+		};
+
+        openContactButton.addEventListener('click', openDialog);
+		closeContactModalButton.addEventListener('click', closeDialog);
+
+        contactModal.addEventListener('click', (event) => {
+			if (event.target === contactModal) {
+				closeDialog();
+			}
+		});
+
+        contactModal.addEventListener('cancel', (event) => {
+			event.preventDefault();
+			closeDialog();
+		});
+
+        contactForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            // Aquí integrarías un servicio como Formspree, EmailJS o tu propio backend.
+            alert('¡Gracias por tu mensaje! (Simulación)');
+            closeDialog();
+        });
+    }
+</script>
+
+<style is:global>
+	#contact-modal {
+		transform: scale(0.95) translateY(10px);
+		opacity: 0;
+		transition: transform 0.3s ease-out, opacity 0.3s ease-out;
+	}
+	#contact-modal::backdrop {
+		background-color: rgb(0 0 0 / 0);
+		transition: background-color 0.3s ease-out;
+	}
+	#contact-modal.open {
+		transform: scale(1) translateY(0);
+		opacity: 1;
+	}
+	#contact-modal.open::backdrop {
+		background-color: rgb(0 0 0 / 0.7);
+	}
+</style>
