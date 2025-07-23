@@ -61,11 +61,41 @@
 			closeDialog();
 		});
 
-        contactForm.addEventListener('submit', (e) => {
+        contactForm.addEventListener('submit', async (e) => {
             e.preventDefault();
-            // Aquí integrarías un servicio como Formspree, EmailJS o tu propio backend.
-            alert('¡Gracias por tu mensaje! (Simulación)');
-            closeDialog();
+            const submitButton = contactForm.querySelector('button[type="submit"]');
+            if (!submitButton) return;
+
+            const originalButtonText = submitButton.innerHTML;
+            //submitButton.disabled = true;
+            submitButton.innerHTML = 'Enviando...';
+
+            const formData = new FormData(contactForm as HTMLFormElement);
+
+            try {
+                const response = await fetch('/api/send-email', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    alert('¡Gracias por tu mensaje! Ha sido enviado correctamente.');
+                    (contactForm as HTMLFormElement).reset();
+                    closeDialog();
+                } else {
+                    alert(`Error: ${result.message || 'No se pudo enviar el mensaje.'}`);
+                }
+            } catch (error) {
+                console.error('Error al enviar el formulario:', error);
+                alert('Ocurrió un error al enviar el formulario. Por favor, inténtalo de nuevo más tarde.');
+            } finally {
+                if (submitButton) {
+                    //submitButton.disabled = false;
+                    submitButton.innerHTML = originalButtonText;
+                }
+            }
         });
     }
 </script>
