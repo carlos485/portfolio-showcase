@@ -8,22 +8,26 @@
     <form id="contact-form" class="space-y-4" novalidate>
         <div>
             <label for="name" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">nombre</label>
-            <input type="text" id="name" name="name" required class="mt-1 block w-full px-3 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm text-black dark:text-white" aria-describedby="name-error">
+            <input type="text" id="name" name="name" required class="mt-1 block w-full px-3 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm text-black dark:text-white disabled:bg-gray-100 dark:disabled:bg-gray-800 disabled:cursor-not-allowed" aria-describedby="name-error">
             <p id="name-error" class="text-red-500 text-sm mt-1 hidden" aria-live="polite"></p>
         </div>
         <div>
             <label for="email" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">email</label>
-            <input type="email" id="email" name="email" required class="mt-1 block w-full px-3 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm text-black dark:text-white" aria-describedby="email-error">
+            <input type="email" id="email" name="email" required class="mt-1 block w-full px-3 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm text-black dark:text-white disabled:bg-gray-100 dark:disabled:bg-gray-800 disabled:cursor-not-allowed" aria-describedby="email-error">
             <p id="email-error" class="text-red-500 text-sm mt-1 hidden" aria-live="polite"></p>
         </div>
         <div>
             <label for="message" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">mensaje</label>
-            <textarea id="message" name="message" rows="4" required class="mt-1 block w-full px-3 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm text-black dark:text-white" aria-describedby="message-error"></textarea>
+            <textarea id="message" name="message" rows="4" required class="mt-1 block w-full px-3 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm text-black dark:text-white disabled:bg-gray-100 dark:disabled:bg-gray-800 disabled:cursor-not-allowed" aria-describedby="message-error"></textarea>
             <p id="message-error" class="text-red-500 text-sm mt-1 hidden" aria-live="polite"></p>
         </div>
         <div class="flex justify-end pt-4">
-            <button type="submit" class="bg-black dark:bg-white text-white hover:bg-gray-800 dark:text-black dark:hover:bg-gray-200 px-6 py-2 text-md font-medium tracking-wide transition-all duration-300 rounded-md">
-                Enviar Mensaje
+            <button type="submit" class="bg-black dark:bg-white text-white hover:bg-gray-800 dark:text-black dark:hover:bg-gray-200 px-6 py-2 text-md font-medium tracking-wide transition-all duration-300 rounded-md flex items-center justify-center min-w-[170px] min-h-[44px] disabled:opacity-75 disabled:cursor-not-allowed">
+                <span class="button-text">Enviar Mensaje</span>
+                <svg class="animate-spin h-5 w-5 text-current hidden button-loader" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
             </button>
         </div>
     </form>
@@ -151,14 +155,23 @@
                 return;
             }
 
-            const submitButton = contactForm.querySelector('button[type="submit"]');
-            if (!submitButton) return;
-
-            const originalButtonText = submitButton.innerHTML;
-            //submitButton.disabled = true;
-            submitButton.innerHTML = 'Enviando...';
-
             const formData = new FormData(contactForm as HTMLFormElement);
+
+            const submitButton = contactForm.querySelector('button[type="submit"]') as HTMLButtonElement;
+            const buttonText = submitButton.querySelector('.button-text') as HTMLSpanElement;
+            const buttonLoader = submitButton.querySelector('.button-loader') as SVGElement;
+
+            if (!submitButton || !buttonText || !buttonLoader) return;
+
+            // --- Iniciar estado de carga ---
+            submitButton.disabled = true;
+            nameInput.disabled = true;
+            emailInput.disabled = true;
+            messageInput.disabled = true;
+            buttonText.classList.add('hidden');
+            buttonLoader.classList.remove('hidden');
+
+            let isSuccess = false;
 
             try {
                 const response = await fetch('/api/send-email', {
@@ -169,13 +182,15 @@
                 const result = await response.json();
 
                 if (response.ok) {
-                    showToast('¡Gracias por tu mensaje! Ha sido enviado correctamente.', 'success');
+                    isSuccess = true;
                     (contactForm as HTMLFormElement).reset();
                     // Limpiar los indicadores de error después de un envío exitoso
                     resetField(nameInput, nameError);
                     resetField(emailInput, emailError);
                     resetField(messageInput, messageError);
-                    closeDialog();
+                    // Mostrar el toast de éxito y esperar un momento antes de cerrar el modal
+                    showToast('¡Gracias por tu mensaje! Ha sido enviado correctamente.', 'success');
+                    setTimeout(closeDialog, 2000); // Cerrar después de 2 segundos
                 } else {
                     showToast(`Error: ${result.message || 'No se pudo enviar el mensaje.'}`, 'error');
                 }
@@ -183,9 +198,15 @@
                 console.error('Error al enviar el formulario:', error);
                 showToast('Ocurrió un error al enviar el formulario. Por favor, inténtalo de nuevo más tarde.', 'error');
             } finally {
-                if (submitButton) {
-                    //submitButton.disabled = false;
-                    submitButton.innerHTML = originalButtonText;
+                // Solo re-habilitar el formulario si el envío no fue exitoso.
+                // Si fue exitoso, el modal se cerrará de todos modos.
+                if (!isSuccess) {
+                    submitButton.disabled = false;
+                    nameInput.disabled = false;
+                    emailInput.disabled = false;
+                    messageInput.disabled = false;
+                    buttonText.classList.remove('hidden');
+                    buttonLoader.classList.add('hidden');
                 }
             }
         });
@@ -211,11 +232,13 @@
 	}
 
     #toast-container {
-        position: fixed;
+        /* Se posiciona absoluto respecto al modal para que aparezca por encima */
+        position: absolute;
         top: 20px;
         left: 50%;
         transform: translateX(-50%);
-        z-index: 9999;
+        /* Un z-index alto asegura que esté sobre el contenido del modal */
+        z-index: 10;
         display: flex;
         flex-direction: column;
         gap: 10px;
