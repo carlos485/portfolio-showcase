@@ -5,18 +5,21 @@
         <h2 class="text-2xl font-bold font-['Major_Mono_Display']">Contacto</h2>
         <button id="close-contact-modal" class="text-3xl hover:text-gray-500 dark:hover:text-gray-400 transition-colors">&times;</button>
     </div>
-    <form id="contact-form" class="space-y-4">
+    <form id="contact-form" class="space-y-4" novalidate>
         <div>
             <label for="name" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">nombre</label>
-            <input type="text" id="name" name="name" required class="mt-1 block w-full px-3 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm text-black dark:text-white">
+            <input type="text" id="name" name="name" required class="mt-1 block w-full px-3 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm text-black dark:text-white" aria-describedby="name-error">
+            <p id="name-error" class="text-red-500 text-sm mt-1 hidden" aria-live="polite"></p>
         </div>
         <div>
             <label for="email" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">email</label>
-            <input type="email" id="email" name="email" required class="mt-1 block w-full px-3 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm text-black dark:text-white">
+            <input type="email" id="email" name="email" required class="mt-1 block w-full px-3 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm text-black dark:text-white" aria-describedby="email-error">
+            <p id="email-error" class="text-red-500 text-sm mt-1 hidden" aria-live="polite"></p>
         </div>
         <div>
             <label for="message" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">mensaje</label>
-            <textarea id="message" name="message" rows="4" required class="mt-1 block w-full px-3 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm text-black dark:text-white"></textarea>
+            <textarea id="message" name="message" rows="4" required class="mt-1 block w-full px-3 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm text-black dark:text-white" aria-describedby="message-error"></textarea>
+            <p id="message-error" class="text-red-500 text-sm mt-1 hidden" aria-live="polite"></p>
         </div>
         <div class="flex justify-end pt-4">
             <button type="submit" class="bg-black dark:bg-white text-white hover:bg-gray-800 dark:text-black dark:hover:bg-gray-200 px-6 py-2 text-md font-medium tracking-wide transition-all duration-300 rounded-md">
@@ -63,6 +66,57 @@
 
         contactForm.addEventListener('submit', async (e) => {
             e.preventDefault();
+
+            const nameInput = document.getElementById('name') as HTMLInputElement;
+            const emailInput = document.getElementById('email') as HTMLInputElement;
+            const messageInput = document.getElementById('message') as HTMLTextAreaElement;
+
+            const nameError = document.getElementById('name-error') as HTMLParagraphElement;
+            const emailError = document.getElementById('email-error') as HTMLParagraphElement;
+            const messageError = document.getElementById('message-error') as HTMLParagraphElement;
+
+            let isValid = true;
+
+            // Función auxiliar para restablecer el estado de un campo
+            const resetField = (input: HTMLElement, errorEl: HTMLElement) => {
+                input.classList.remove('border-red-500', 'dark:border-red-500');
+                input.classList.add('border-gray-300', 'dark:border-gray-600');
+                errorEl.classList.add('hidden');
+                errorEl.textContent = '';
+            };
+
+            // Función auxiliar para establecer el estado de error de un campo
+            const setFieldError = (input: HTMLElement, errorEl: HTMLElement, message: string) => {
+                input.classList.remove('border-gray-300', 'dark:border-gray-600');
+                input.classList.add('border-red-500', 'dark:border-red-500');
+                errorEl.textContent = message;
+                errorEl.classList.remove('hidden');
+                isValid = false;
+            };
+
+            // Restablecer todos los campos antes de validar
+            resetField(nameInput, nameError);
+            resetField(emailInput, emailError);
+            resetField(messageInput, messageError);
+
+            // --- Validación ---
+            if (nameInput.value.trim() === '') {
+                setFieldError(nameInput, nameError, 'El nombre es obligatorio.');
+            }
+            if (emailInput.value.trim() === '') {
+                setFieldError(emailInput, emailError, 'El email es obligatorio.');
+            } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailInput.value)) {
+                setFieldError(emailInput, emailError, 'Por favor, introduce un email válido.');
+            }
+            if (messageInput.value.trim() === '') {
+                setFieldError(messageInput, messageError, 'El mensaje es obligatorio.');
+            }
+
+            if (!isValid) {
+                // Detener la ejecución si el formulario no es válido
+                return;
+            }
+
             const submitButton = contactForm.querySelector('button[type="submit"]');
             if (!submitButton) return;
 
@@ -83,6 +137,10 @@
                 if (response.ok) {
                     alert('¡Gracias por tu mensaje! Ha sido enviado correctamente.');
                     (contactForm as HTMLFormElement).reset();
+                    // Limpiar los indicadores de error después de un envío exitoso
+                    resetField(nameInput, nameError);
+                    resetField(emailInput, emailError);
+                    resetField(messageInput, messageError);
                     closeDialog();
                 } else {
                     alert(`Error: ${result.message || 'No se pudo enviar el mensaje.'}`);
