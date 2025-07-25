@@ -40,14 +40,11 @@
      * @param {'success' | 'error'} type El tipo de notificación, para aplicar el estilo correcto.
      */
     function showToast(message: any, type = 'success') {
-        const modal = document.getElementById('contact-modal');
-        if (!modal) return; // No mostrar el toast si el modal no existe
-
-        let toastContainer = modal.querySelector('#toast-container');
+        let toastContainer = document.getElementById('toast-container');
         if (!toastContainer) {
             toastContainer = document.createElement('div');
             toastContainer.id = 'toast-container';
-            modal.appendChild(toastContainer);
+            document.body.appendChild(toastContainer);
         }
 
         const toast = document.createElement('div');
@@ -171,8 +168,6 @@
             buttonText.classList.add('hidden');
             buttonLoader.classList.remove('hidden');
 
-            let isSuccess = false;
-
             try {
                 const response = await fetch('/api/send-email', {
                     method: 'POST',
@@ -182,7 +177,6 @@
                 const result = await response.json();
 
                 if (response.ok) {
-                    isSuccess = true;
                     (contactForm as HTMLFormElement).reset();
                     // Limpiar los indicadores de error después de un envío exitoso
                     resetField(nameInput, nameError);
@@ -190,7 +184,7 @@
                     resetField(messageInput, messageError);
                     // Mostrar el toast de éxito y esperar un momento antes de cerrar el modal
                     showToast('¡Gracias por tu mensaje! Ha sido enviado correctamente.', 'success');
-                    setTimeout(closeDialog, 2000); // Cerrar después de 2 segundos
+                    closeDialog();
                 } else {
                     showToast(`Error: ${result.message || 'No se pudo enviar el mensaje.'}`, 'error');
                 }
@@ -198,16 +192,12 @@
                 console.error('Error al enviar el formulario:', error);
                 showToast('Ocurrió un error al enviar el formulario. Por favor, inténtalo de nuevo más tarde.', 'error');
             } finally {
-                // Solo re-habilitar el formulario si el envío no fue exitoso.
-                // Si fue exitoso, el modal se cerrará de todos modos.
-                if (!isSuccess) {
-                    submitButton.disabled = false;
-                    nameInput.disabled = false;
-                    emailInput.disabled = false;
-                    messageInput.disabled = false;
-                    buttonText.classList.remove('hidden');
-                    buttonLoader.classList.add('hidden');
-                }
+                submitButton.disabled = false;
+                nameInput.disabled = false;
+                emailInput.disabled = false;
+                messageInput.disabled = false;
+                buttonText.classList.remove('hidden');
+                buttonLoader.classList.add('hidden');
             }
         });
     }
@@ -232,13 +222,11 @@
 	}
 
     #toast-container {
-        /* Se posiciona absoluto respecto al modal para que aparezca por encima */
-        position: absolute;
+        position: fixed;
         top: 20px;
         left: 50%;
         transform: translateX(-50%);
-        /* Un z-index alto asegura que esté sobre el contenido del modal */
-        z-index: 10;
+        z-index: 9999;
         display: flex;
         flex-direction: column;
         gap: 10px;
