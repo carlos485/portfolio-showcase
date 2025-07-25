@@ -39,12 +39,19 @@
      * @param {string} message El mensaje a mostrar.
      * @param {'success' | 'error'} type El tipo de notificación, para aplicar el estilo correcto.
      */
-    function showToast(message: any, type = 'success') {
-        let toastContainer = document.getElementById('toast-container');
+    function showToast(message: any, type = 'success', parentElement: HTMLElement = document.body) {
+        // Limpia el contenedor del otro posible padre para evitar duplicados
+        const otherParent = parentElement === document.body ? document.getElementById('contact-modal') : document.body;
+        if (otherParent) {
+            otherParent.querySelector('#toast-container')?.remove();
+        }
+
+        // Busca o crea el contenedor en el padre especificado
+        let toastContainer = parentElement.querySelector(':scope > #toast-container');
         if (!toastContainer) {
             toastContainer = document.createElement('div');
             toastContainer.id = 'toast-container';
-            document.body.appendChild(toastContainer);
+            parentElement.appendChild(toastContainer);
         }
 
         const toast = document.createElement('div');
@@ -186,11 +193,11 @@
                     showToast('¡Gracias por tu mensaje! Ha sido enviado correctamente.', 'success');
                     closeDialog();
                 } else {
-                    showToast(`Error: ${result.message || 'No se pudo enviar el mensaje.'}`, 'error');
+                    showToast(`Error: ${result.message || 'No se pudo enviar el mensaje.'}`, 'error', contactModal);
                 }
             } catch (error) {
                 console.error('Error al enviar el formulario:', error);
-                showToast('Ocurrió un error al enviar el formulario. Por favor, inténtalo de nuevo más tarde.', 'error');
+                showToast('Ocurrió un error al enviar el formulario. Por favor, inténtalo de nuevo más tarde.', 'error', contactModal);
             } finally {
                 submitButton.disabled = false;
                 nameInput.disabled = false;
@@ -220,6 +227,12 @@
 	#contact-modal.open::backdrop {
 		background-color: rgb(0 0 0 / 0.7);
 	}
+
+    /* Estilo para el contenedor de toast cuando está DENTRO del modal */
+    #contact-modal #toast-container {
+        position: absolute;
+        z-index: 10; /* Suficiente para estar sobre el contenido del modal */
+    }
 
     #toast-container {
         position: fixed;
