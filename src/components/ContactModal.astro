@@ -30,6 +30,40 @@
 </dialog>
 
 <script>
+    /**
+     * Muestra una notificación toast en la pantalla.
+     * @param {string} message El mensaje a mostrar.
+     * @param {'success' | 'error'} type El tipo de notificación, para aplicar el estilo correcto.
+     */
+    function showToast(message: any, type = 'success') {
+        const modal = document.getElementById('contact-modal');
+        if (!modal) return; // No mostrar el toast si el modal no existe
+
+        let toastContainer = modal.querySelector('#toast-container');
+        if (!toastContainer) {
+            toastContainer = document.createElement('div');
+            toastContainer.id = 'toast-container';
+            modal.appendChild(toastContainer);
+        }
+
+        const toast = document.createElement('div');
+        toast.className = `toast toast-${type}`;
+        toast.textContent = message;
+
+        toastContainer.appendChild(toast);
+
+        // Pequeño retardo para permitir que el navegador renderice el elemento antes de animarlo
+        setTimeout(() => {
+            toast.classList.add('show');
+        }, 100);
+
+        // Ocultar y eliminar el toast después de 3 segundos
+        setTimeout(() => {
+            toast.classList.remove('show');
+            toast.addEventListener('transitionend', () => toast.remove(), { once: true });
+        }, 3000);
+    }
+
     const contactModal = document.getElementById('contact-modal') as HTMLDialogElement | null;
 	const openContactButton = document.getElementById('open-contact-button');
 	const closeContactModalButton = document.getElementById('close-contact-modal');
@@ -135,7 +169,7 @@
                 const result = await response.json();
 
                 if (response.ok) {
-                    alert('¡Gracias por tu mensaje! Ha sido enviado correctamente.');
+                    showToast('¡Gracias por tu mensaje! Ha sido enviado correctamente.', 'success');
                     (contactForm as HTMLFormElement).reset();
                     // Limpiar los indicadores de error después de un envío exitoso
                     resetField(nameInput, nameError);
@@ -143,11 +177,11 @@
                     resetField(messageInput, messageError);
                     closeDialog();
                 } else {
-                    alert(`Error: ${result.message || 'No se pudo enviar el mensaje.'}`);
+                    showToast(`Error: ${result.message || 'No se pudo enviar el mensaje.'}`, 'error');
                 }
             } catch (error) {
                 console.error('Error al enviar el formulario:', error);
-                alert('Ocurrió un error al enviar el formulario. Por favor, inténtalo de nuevo más tarde.');
+                showToast('Ocurrió un error al enviar el formulario. Por favor, inténtalo de nuevo más tarde.', 'error');
             } finally {
                 if (submitButton) {
                     //submitButton.disabled = false;
@@ -175,4 +209,32 @@
 	#contact-modal.open::backdrop {
 		background-color: rgb(0 0 0 / 0.7);
 	}
+
+    #toast-container {
+        position: fixed;
+        top: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 9999;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        align-items: center;
+    }
+    .toast {
+        padding: 1rem 1.5rem;
+        border-radius: 0.375rem; /* rounded-md */
+        color: white;
+        font-weight: 500;
+        box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+        opacity: 0;
+        transform: translateY(-20px);
+        transition: opacity 0.3s ease, transform 0.3s ease;
+    }
+    .toast.show {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    .toast-success { background-color: #10B981; } /* Tailwind green-500 */
+    .toast-error { background-color: #EF4444; } /* Tailwind red-500 */
 </style>
